@@ -18,7 +18,7 @@ public class Receipt implements Serializable {
     @Id
     @GeneratedValue
     private long ID;
-    @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(name = "receipt_objects", joinColumns = @JoinColumn(name="receipt_id", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name="object_id", referencedColumnName = "id"))
     private List<Purchaseobject> purchasedObjects = new ArrayList<>();
