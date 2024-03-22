@@ -397,8 +397,9 @@ List<Purchaseobject> objects = new ArrayList<>();
                     po.setBought(true);
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
-                    purchaseObjectRepo.save(po);
                     objects.add(po);
+                    purchaseObjectRepo.save(po);
+                    
                     // receipt.getPurchasedObjects().add(po);
                     
                     logger.info("Object saved to database and receipt created");
@@ -406,7 +407,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                 
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
-                receipt.setPurchasedObjects(objects.stream().collect(Collectors.toList()));
+                receipt.setPurchasedObjects(objects);
                 receiptRepository.save(receipt);
                 objects.clear();
                 System.out.println(items);
