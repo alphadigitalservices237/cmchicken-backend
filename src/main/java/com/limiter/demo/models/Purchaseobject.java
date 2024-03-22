@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 @Entity
 @Table(name="purchase_object")
@@ -20,6 +23,7 @@ public class Purchaseobject {
     private String description;
     private Boolean bought=false;
     private Date addedDate;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id",insertable = false,updatable = false)
     private UserEntity user;
