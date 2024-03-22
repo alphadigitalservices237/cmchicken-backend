@@ -385,6 +385,7 @@ public Object doAll(@RequestBody List<Product> products,
             }
             else {
 Receipt receipt =new Receipt();
+List<Purchaseobject> objects = new ArrayList<>();
                 for (Product  t: items) {
 
                     Purchaseobject po = new Purchaseobject();
@@ -397,12 +398,17 @@ Receipt receipt =new Receipt();
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
                     purchaseObjectRepo.save(po);
-                    receipt.getPurchasedObjects().add(po);
+                    objects.add(po);
+                    // receipt.getPurchasedObjects().add(po);
+                    
                     logger.info("Object saved to database and receipt created");
                 }
+                
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
+                receipt.setPurchasedObjects(objects);
                 receiptRepository.save(receipt);
+                objects.clear();
                 System.out.println(items);
                 logger.info("Payment successful");
                 return new ResponseEntity<>("Payment successful",HttpStatus.OK);
