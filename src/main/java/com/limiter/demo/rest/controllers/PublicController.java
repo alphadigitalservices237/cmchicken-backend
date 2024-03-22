@@ -402,6 +402,7 @@ Receipt receipt =new Receipt();
                 }
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
+                receiptRepository.save(receipt);
                 System.out.println(items);
                 logger.info("Payment successful");
                 return new ResponseEntity<>("Payment successful",HttpStatus.OK);
