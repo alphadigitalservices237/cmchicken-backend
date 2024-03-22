@@ -3,6 +3,7 @@ package com.limiter.demo.models;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class UserEntity implements Serializable {
     private String randomized;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<Delivery> deliveries;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Purchaseobject> purchaseobjectList;
 
