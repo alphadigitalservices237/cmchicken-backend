@@ -21,7 +21,7 @@ public class Receipt implements Serializable {
     @ManyToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "receipt_objects", joinColumns = @JoinColumn(name="receipt_id", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name="object_id", referencedColumnName = "id"))
-    private List<Purchaseobject> purchasedObjects;
+    private List<Purchaseobject> purchasedObjects = new ArrayList<>();
     private Date date= new Date();
     private long user_id;
 }
