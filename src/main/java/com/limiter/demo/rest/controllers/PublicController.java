@@ -406,7 +406,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                 
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
-                receipt.setPurchasedObjects(objects);
+                receipt.setPurchasedObjects(objects.stream().collect(Collectors.toList()));
                 receiptRepository.save(receipt);
                 objects.clear();
                 System.out.println(items);
