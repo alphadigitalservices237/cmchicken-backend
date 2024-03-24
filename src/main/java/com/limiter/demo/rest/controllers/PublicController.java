@@ -119,7 +119,8 @@ public String getPaymentStatus() {
     // Return response body
     return response.getBody();
 }
-    public String updatePayment(String reference,String phone) {
+    public String updatePayment(String reference,String phone) //Method to complete the payment
+     {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -408,6 +409,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
                 receipt.setPurchasedObjects(objects);
+                receipt.setUser_name(SecurityContextHolder.getContext().getAuthentication().getName());
                 receiptRepository.save(receipt);
                 objects.clear();
                 System.out.println(items);

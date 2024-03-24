@@ -24,4 +24,6 @@ public class Receipt implements Serializable {
     private List<Purchaseobject> purchasedObjects = new ArrayList<>();
     private Date date= new Date();
     private long user_id;
+    @Column(nullable = true)
+    private String user_name;
 }
