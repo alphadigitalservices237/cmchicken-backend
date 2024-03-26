@@ -101,9 +101,9 @@ public class ProductController {
             return new ResponseEntity<>("No image, Image is required",HttpStatus.BAD_REQUEST);
         }*/
 
-        if (image.getSize() > 2 * 1024 * 1024) {
+        if (image.getSize() > 5 * 1024 * 1024) {
             // Image size exceeds limit of 2MB
-            return new ResponseEntity<>("Image size cannot exceed 2MB", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Image size cannot exceed 5MB", HttpStatus.BAD_REQUEST);
         }
         if (image.isEmpty() || image == null) {
             try {
