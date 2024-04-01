@@ -60,21 +60,21 @@ public Object getCurrentUser()
 {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     Authentication user = SecurityContextHolder.getContext().getAuthentication();
-    Role cashier=roleRepository.findByName("CASHIER").get();
-    Role employee=roleRepository.findByName("EMPLOYEE").get();
-    Role manager=roleRepository.findByName("MANAGER").get();
+    Role waiter=roleRepository.findByName("WAITER").get();
+    Role cook=roleRepository.findByName("COOK").get();
+    Role client=roleRepository.findByName("CLIENT").get();
     Role admin=roleRepository.findByName("ADMIN").get();
-    if(user.getAuthorities().toArray()[0].toString().equals(cashier.getName()))
+    if(user.getAuthorities().toArray()[0].toString().equals(waiter.getName()))
     {
-        return cashier.getName();
+        return waiter.getName();
     }
-    else if (user.getAuthorities().toArray()[0].toString().equals(employee.getName()))
+    else if (user.getAuthorities().toArray()[0].toString().equals(cook.getName()))
     {
-        return employee.getName();
+        return cook.getName();
     }
-    else if(user.getAuthorities().toArray()[0].toString().equals(manager.getName()))
+    else if(user.getAuthorities().toArray()[0].toString().equals(client.getName()))
     {
-        return manager.getName();
+        return client.getName();
     }
 
     else if(user.getAuthorities().toArray()[0].toString().equals(admin.getName()))
