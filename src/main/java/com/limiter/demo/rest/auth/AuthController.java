@@ -8,6 +8,7 @@ import com.limiter.demo.models.Role;
 import com.limiter.demo.models.UserEntity;
 import com.limiter.demo.repositories.RoleRepository;
 import com.limiter.demo.repositories.UserRepository;
+import com.limiter.demo.rest.controllers.EmailService;
 import com.limiter.demo.security.JWTGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,14 +33,16 @@ public class AuthController {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private JWTGenerator jwtGenerator;
+    private EmailService emailService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtGenerator = jwtGenerator;
+        this.emailService = emailService;
     }
 
     @PostMapping("employee/login")
@@ -98,6 +101,7 @@ public Object getCurrentUser()
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role roles= roleRepository.findByName("ADMIN").get();
         user.setRoles(Collections.singletonList(roles));
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Admin role",
@@ -116,6 +120,7 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("CLIENT").get();
         user.setRoles(Collections.singletonList(roles));
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Client status",
@@ -134,6 +139,8 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("WAITER").get();
         user.setRoles(Collections.singletonList(roles));
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with 'waiter' role",
@@ -153,6 +160,8 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("COOK").get();
         user.setRoles(Collections.singletonList(roles));
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with cook role",
