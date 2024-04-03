@@ -23,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collections;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping("api/v1/auth")
 @CrossOrigin(origins = "*")
@@ -90,7 +92,7 @@ public Object getCurrentUser()
 }
 
     @PostMapping("admin/register")
-    public ResponseEntity<String> adminRegister(@RequestBody RegisterDto registerDto)
+    public ResponseEntity<String> adminRegister(@RequestBody RegisterDto registerDto) throws MessagingException
     {
         if(userRepository.existsByUsername(registerDto.getUsername()))
         {
@@ -101,14 +103,15 @@ public Object getCurrentUser()
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role roles= roleRepository.findByName("ADMIN").get();
         user.setRoles(Collections.singletonList(roles));
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+        String html_message = "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>";
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION",html_message );
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Admin role",
                 HttpStatus.OK);
     }
     @PostMapping("client/register")
-    public ResponseEntity<String> clientRegister(@RequestBody RegisterDto registerDto)
+    public ResponseEntity<String> clientRegister(@RequestBody RegisterDto registerDto) throws MessagingException
     {
         if(userRepository.existsByUsername(registerDto.getUsername()))
         {
@@ -127,7 +130,7 @@ public Object getCurrentUser()
                 HttpStatus.OK);
     }
     @PostMapping("waiter/register")
-    public ResponseEntity<String> waiterRegister(@RequestBody RegisterDto registerDto)
+    public ResponseEntity<String> waiterRegister(@RequestBody RegisterDto registerDto) throws MessagingException
     {
         if(userRepository.existsByUsername(registerDto.getUsername()))
         {
@@ -148,7 +151,7 @@ public Object getCurrentUser()
     }
 
     @PostMapping("cook/register")
-    public ResponseEntity<String> cookRegister(@RequestBody RegisterDto registerDto)
+    public ResponseEntity<String> cookRegister(@RequestBody RegisterDto registerDto) throws MessagingException
     {
         if(userRepository.existsByUsername(registerDto.getUsername()))
         {

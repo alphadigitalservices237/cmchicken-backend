@@ -1,5 +1,8 @@
 package com.limiter.demo.rest.controllers;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,13 +14,14 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String to, String subject, String body) {
+    public void sendEmail(String to, String subject, String body) throws MessagingException {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("alphadigitalservices237@gmail.com");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-
+        MimeMessage msg = mailSender.createMimeMessage();
+        String htmlContent = body;
+        msg.setFrom("alphadigitalservices237@gmail.com");
+        msg.setRecipients(MimeMessage.RecipientType.TO, to);
+        msg.setSubject(subject);
+        msg.setContent(htmlContent, "text/html; charset=utf-8");
         mailSender.send(message);
     }
 }
