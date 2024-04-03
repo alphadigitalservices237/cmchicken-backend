@@ -15,7 +15,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     public void sendEmail(String to, String subject, String body) throws MessagingException {
-        SimpleMailMessage message = new SimpleMailMessage();
+        // SimpleMailMessage message = new SimpleMailMessage();
         MimeMessage msg = mailSender.createMimeMessage();
         String htmlContent = body;
         msg.setFrom("alphadigitalservices237@gmail.com");
