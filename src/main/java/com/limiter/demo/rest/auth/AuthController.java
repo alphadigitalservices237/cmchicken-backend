@@ -59,7 +59,6 @@ public class AuthController {
     }
 
 
-
 @GetMapping("user/get")
 public Object getCurrentUser()
 {
@@ -177,7 +176,7 @@ public Object getCurrentUser()
         Optional<UserEntity> user = userRepository.findByUsername(authentication.getName());
         if(user.isPresent())
         {
-            return user.get();
+            return new ResponseEntity<>(user.get().getUsername(),HttpStatus.OK);
         }
         return new ResponseEntity<>("User not logged in",HttpStatus.BAD_REQUEST);
     }
