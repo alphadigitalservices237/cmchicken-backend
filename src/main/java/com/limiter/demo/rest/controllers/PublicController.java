@@ -375,7 +375,7 @@ public Object doAll(@RequestBody List<Product> products,
             JsonNode statusNode = rootNode.path("transaction").path("status");
             String statusValue = statusNode.asText();
             System.out.println("the status is: "+statusValue);
-            if(statusValue.equals("pending") || statusValue.equals("failed") || statusValue.equals("expired"))
+            if(statusValue.equals("pending") || statusValue.equals("failed") || statusValue.equals("expired") || statusValue.equals("processing") || statusValue.equals("failed"))
             {
                 // I have to produce code to cancel the action
                 cancelPayment();
