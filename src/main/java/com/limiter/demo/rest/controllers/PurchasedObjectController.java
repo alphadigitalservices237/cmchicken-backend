@@ -36,7 +36,7 @@ public class PurchasedObjectController {
                     return new ResponseEntity<>("NO ITEMS PURCHASED YET", HttpStatus.EXPECTATION_FAILED);
                 }
                 else {
-                    return new ResponseEntity<>(client.get().getPurchaseobjectList(), HttpStatus.FOUND);
+                    return new ResponseEntity<>(client.get().getPurchaseobjectList(), HttpStatus.OK);
                 }
         }
         else{
