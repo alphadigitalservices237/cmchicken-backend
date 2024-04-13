@@ -79,7 +79,7 @@ public class PurchasedObjectController {
         if(client.isPresent())
         {
                 if (client.get().getPurchaseobjectList().isEmpty()) {
-                    return new ResponseEntity<>("NO ITEMS PURCHASED YET", HttpStatus.EXPECTATION_FAILED);
+                    return new ResponseEntity<>("NO ITEMS PURCHASED YET", HttpStatus.OK);
                 }
                 else {
                     List<Purchaseobject> objs = client.get().getPurchaseobjectList().stream().filter(obj->obj.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now()))
