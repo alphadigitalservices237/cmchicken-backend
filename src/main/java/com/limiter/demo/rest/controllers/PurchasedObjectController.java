@@ -71,7 +71,7 @@ public class PurchasedObjectController {
         }
     }
 
-    @GetMapping("products/{date}/today")
+    @GetMapping("products/today")
     public Object getUserProductsForToday()
     {
         Authentication auth  = SecurityContextHolder.getContext().getAuthentication();
