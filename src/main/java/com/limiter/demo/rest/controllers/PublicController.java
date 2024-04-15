@@ -53,6 +53,7 @@ public class PublicController {
     @Autowired
     TemporaryObjectRepo temporaryObjectRepo;
     Code c1 = new Code();
+    List<Product> tempo = new ArrayList<>();
 
     @GetMapping("product/all")
     public Object viewAllProducts() {
@@ -84,7 +85,7 @@ public class PublicController {
                 for(Product po : productRepository.findAll())
                 {
                     po.setQuantity(po.getQuantity() - to.getQuantity());
-                    productRepository.save(po);
+                    tempo.add(po);
                 }
     
             }
@@ -415,7 +416,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                     
                     logger.info("Object saved to database and receipt created");
                 }
-                
+                productRepository.saveAll(tempo);
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
                 receipt.setPurchasedObjects(objects);
