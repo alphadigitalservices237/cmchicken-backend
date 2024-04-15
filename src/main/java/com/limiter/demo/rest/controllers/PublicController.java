@@ -68,8 +68,9 @@ public class PublicController {
         Optional<UserEntity> client = userRepository.findByUsername(auth.getName());
         List<Double> sums = new ArrayList<>();
 
-
         try {
+
+           
             for(Product p: products)
             {
                 TemporaryObject to = new TemporaryObject();
@@ -79,7 +80,16 @@ public class PublicController {
                 to.setPrice(p.getPrice());
                 to.setQuantity(p.getQuantity());
                 temporaryObjectRepo.save(to);
+
+                for(Product po : productRepository.findAll())
+                {
+                    po.setQuantity(po.getQuantity() - to.getQuantity());
+                    productRepository.save(po);
+                }
+    
             }
+            
+
             System.out.println(temporaryObjectRepo.findAll());
             for (Product p : products) {
                 sums.add(p.getPrice() * p.getQuantity());
