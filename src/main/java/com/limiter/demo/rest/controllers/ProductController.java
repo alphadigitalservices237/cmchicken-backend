@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.imaging.*;
@@ -242,7 +243,11 @@ public class ProductController {
     {
         return  categoryRepository.findAll().parallelStream().collect(Collectors.toList());
 
-
-
+    }
+    @GetMapping("product/{name}/all")
+    public Object getProductsLikeName(@PathVariable String name)
+    {
+        List<Product> products = productRepository.findAll().parallelStream().filter(prod->prod.getName().contains(name)).collect(Collectors.toList());
+        return new ResponseEntity<>(products,HttpStatus.OK);
     }
 }
