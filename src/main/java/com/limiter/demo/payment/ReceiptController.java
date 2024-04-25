@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/v1/auth/receipts")
@@ -46,4 +48,10 @@ public class ReceiptController {
     {
         return new ResponseEntity<>(receiptRepository.findAll().parallelStream().collect(Collectors.toList()),HttpStatus.OK);
     }
+
+    @GetMapping("users/all")
+    public Object getAllUsersObject(@RequestParam String param) {
+        return new String();
+    }
+    
 }

@@ -97,17 +97,22 @@ public Object getCurrentUser()
         {
             return new ResponseEntity<>("Username already taken", HttpStatus.BAD_REQUEST);
         }
+        try{
         UserEntity user = new UserEntity();
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role roles= roleRepository.findByName("ADMIN").get();
         user.setRoles(Collections.singletonList(roles));
-        String html_message = "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>";
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION",html_message );
+        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION","<HTML><body><h1>Sucessfully registered as admin </h1>"+registerDto.getUsername()+"</body></HTML>" );
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Admin role",
                 HttpStatus.OK);
+        }
+        catch(MessagingException ex)
+        {
+            return new ResponseEntity<>(ex.getLocalizedMessage(),HttpStatus.OK);
+        }
     }
     @PostMapping("client/register")
     public ResponseEntity<String> clientRegister(@RequestBody RegisterDto registerDto) throws MessagingException
