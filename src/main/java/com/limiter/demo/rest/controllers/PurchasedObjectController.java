@@ -18,6 +18,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -91,6 +94,21 @@ public class PurchasedObjectController {
             return new ResponseEntity<>("PLEASE LOGIN", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("products/bought/today")
+    public Object getAllPurchasedProducts() {
+        List<UserEntity> users = userRepository.findAll();
+        List<List<Purchaseobject>> purchaseobjects = users.parallelStream().map(obj->obj.getPurchaseobjectList()).collect(Collectors.toList());
+
+        List<Purchaseobject> simple = purchaseobjects.parallelStream().flatMap(List::stream).collect(Collectors.toList());
+
+         List<Purchaseobject>  objs =
+          simple.parallelStream().filter(obj->obj.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())).
+          collect(Collectors.toList());
+
+        return objs;
+    }
+    
 
 
 
