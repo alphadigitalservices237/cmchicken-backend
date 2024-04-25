@@ -89,6 +89,19 @@ public Object getCurrentUser()
 
 
 }
+@GetMapping("user/{id}/name")
+public Object getCurrentUserById(@PathVariable long id)
+{
+    Optional<UserEntity> user = userRepository.findById(id);
+    if(user.isPresent())
+    {
+        return new ResponseEntity<String>(user.get().getUsername(),HttpStatus.OK);
+    }
+    return new ResponseEntity<>("User not existing",HttpStatus.BAD_REQUEST);
+    
+
+
+}
 
     @PostMapping("admin/register")
     public ResponseEntity<String> adminRegister(@RequestBody RegisterDto registerDto) throws MessagingException
