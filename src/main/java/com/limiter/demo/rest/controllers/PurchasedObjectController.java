@@ -95,15 +95,15 @@ public class PurchasedObjectController {
         }
     }
 
-    @GetMapping("products/bought/today")
-    public Object getAllPurchasedProducts() {
+    @GetMapping("products/bought/{date}")
+    public Object getAllPurchasedProducts(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         List<UserEntity> users = userRepository.findAll();
         List<List<Purchaseobject>> purchaseobjects = users.parallelStream().map(obj->obj.getPurchaseobjectList()).collect(Collectors.toList());
 
         List<Purchaseobject> simple = purchaseobjects.parallelStream().flatMap(List::stream).collect(Collectors.toList());
 
          List<Purchaseobject>  objs =
-          simple.parallelStream().filter(obj->obj.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())).
+          simple.parallelStream().filter(obj->obj.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(date)).
           collect(Collectors.toList());
 
         return objs;
