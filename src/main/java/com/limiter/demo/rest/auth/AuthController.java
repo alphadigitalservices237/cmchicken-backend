@@ -103,13 +103,13 @@ public Object getCurrentUser()
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         Role roles= roleRepository.findByName("ADMIN").get();
         user.setRoles(Collections.singletonList(roles));
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION","<HTML><body><h1>Sucessfully registered as admin </h1>"+registerDto.getUsername()+"</body></HTML>" );
+        // emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION","<HTML><body><h1>Sucessfully registered as admin </h1>"+registerDto.getUsername()+"</body></HTML>" );
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Admin role",
                 HttpStatus.OK);
         }
-        catch(MessagingException ex)
+        catch(Exception ex)
         {
             return new ResponseEntity<>(ex.getLocalizedMessage(),HttpStatus.OK);
         }
@@ -127,7 +127,7 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("CLIENT").get();
         user.setRoles(Collections.singletonList(roles));
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+        // emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
         userRepository.save(user);
 
         return new ResponseEntity<>("User registered success with Client status",
@@ -146,7 +146,7 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("WAITER").get();
         user.setRoles(Collections.singletonList(roles));
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+        // emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
 
         userRepository.save(user);
 
@@ -167,7 +167,7 @@ public Object getCurrentUser()
 
         Role roles= roleRepository.findByName("COOK").get();
         user.setRoles(Collections.singletonList(roles));
-        emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
+        // emailService.sendEmail(registerDto.getUsername(), "CM CHICKEN REGISTRATION", "<HTML><body><h1>Sucessfully registered </h1>"+registerDto.getUsername()+"</body></HTML>");
 
         userRepository.save(user);
 
