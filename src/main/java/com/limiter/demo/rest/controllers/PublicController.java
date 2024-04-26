@@ -202,7 +202,10 @@ public Object doAll(@RequestBody List<Product> products,
                     @RequestParam("amount") int amount,
                     @RequestParam("phone") String phone,
                     @RequestParam("reference") String reference,
-                    @RequestParam("description") String description) throws JsonProcessingException
+                    @RequestParam("description") String description,
+                    @RequestParam("location") String location
+
+                    ) throws JsonProcessingException
 {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     Optional<UserEntity> user = userRepository.findByUsername(auth.getName());
@@ -266,7 +269,7 @@ public Object doAll(@RequestBody List<Product> products,
 
 
                 try {
-                    doTheRest(products,user);
+                    doTheRest(products,user,location,phone);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -294,7 +297,8 @@ public Object doAll(@RequestBody List<Product> products,
                         @RequestParam("phone") String phone,
                         @RequestParam("reference") String reference,
                         @RequestParam("description") String description,
-                        @RequestParam String destination) throws JsonProcessingException
+                        @RequestParam ("location")String destination
+                        ) throws JsonProcessingException
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Optional<UserEntity> user = userRepository.findByUsername(auth.getName());
@@ -358,7 +362,7 @@ public Object doAll(@RequestBody List<Product> products,
 
 
                     try {
-                        doTheRestWithDelivery(products,user,destination);
+                        doTheRestWithDelivery(products,user,destination,phone);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
@@ -377,7 +381,7 @@ public Object doAll(@RequestBody List<Product> products,
         return new ResponseEntity<>("Please login",HttpStatus.UNAUTHORIZED);
 
     }
-    public Object doTheRest(List<Product> items,Optional<UserEntity> user) throws JsonProcessingException
+    public Object doTheRest(List<Product> items,Optional<UserEntity> user, String location, String phone_number) throws JsonProcessingException
     {
         String jsonString=getPaymentStatus();
         ObjectMapper Mapper = new ObjectMapper();
@@ -422,6 +426,8 @@ List<Purchaseobject> objects = new ArrayList<>();
                 receipt.setUser_id(user.get().getId());
                 receipt.setPurchasedObjects(objects);
                 receipt.setUser_name(user.get().getUsername());
+                receipt.setLocation(location);
+                receipt.setPhone_number(phone_number);
                 receiptRepository.save(receipt);
                 objects.clear();
                 System.out.println(items);
@@ -431,7 +437,7 @@ List<Purchaseobject> objects = new ArrayList<>();
 
     }
 
-    public Object doTheRestWithDelivery(List<Product> items,Optional<UserEntity> user,String destination) throws JsonProcessingException
+    public Object doTheRestWithDelivery(List<Product> items,Optional<UserEntity> user,String destination,String phone_number) throws JsonProcessingException
     {
         String jsonString=getPaymentStatus();
         ObjectMapper Mapper = new ObjectMapper();
@@ -451,31 +457,36 @@ List<Purchaseobject> objects = new ArrayList<>();
         }
         else {
 Delivery delivery = new Delivery();
-            Receipt receipt =new Receipt();
-            for (Product  t: items) {
-                Purchaseobject po = new Purchaseobject();
-                po.setName(t.getName());
-                po.setBought(true);
-                po.setUser_id(user.get().getId());
-                po.setDescription(t.getDescription());
-                po.setQuantity(t.getQuantity());
-                po.setBought(true);
-                po.setAddedDate(new Date());
-                po.setPrice(t.getPrice());
-                purchaseObjectRepo.save(po);
-                logger.info("Object saved to database");
-                receipt.getPurchasedObjects().add(po);
-                delivery.getProductList().add(po);
-            }
+Receipt receipt =new Receipt();
+List<Purchaseobject> objects = new ArrayList<>();
+                for (Product  t: items) {
 
-            delivery.setUser_id(user.get().getId());
-            delivery.setDestination(destination);
-            delivery.setDelivered(true);
-            deliveryRepository.save(delivery);
+                    Purchaseobject po = new Purchaseobject();
+                    po.setName(t.getName());
+                    po.setBought(true);
+                    po.setUser_id(user.get().getId());
+                    po.setDescription(t.getDescription());
+                    po.setQuantity(t.getQuantity());
+                    po.setBought(true);
+                    po.setAddedDate(new Date());
+                    po.setPrice(t.getPrice());
+                    objects.add(po);
+                    purchaseObjectRepo.save(po);
+                    
+                    // receipt.getPurchasedObjects().add(po);
+                    
+                    logger.info("Object saved to database and receipt created");
+            }
+            productRepository.saveAll(tempo);
             receipt.setDate(new Date());
             receipt.setUser_id(user.get().getId());
-
-
+            receipt.setPurchasedObjects(objects);
+            receipt.setUser_name(user.get().getUsername());
+            receipt.setLocation(destination);
+            receipt.setPhone_number(phone_number);
+            receipt.setDelivered(true);
+            receiptRepository.save(receipt);
+            objects.clear();
             System.out.println(items);
             logger.info("Payment successful");
             return new ResponseEntity<>("Payment successful",HttpStatus.OK);

@@ -26,4 +26,10 @@ public class Receipt implements Serializable {
     private long user_id;
     @Column(nullable = true)
     private String user_name;
+    @Column(nullable = true)
+    private String phone_number;
+    @Column(nullable = true)
+    private String location;
+    @Column(nullable = true)
+    private boolean delivered=false;
 }
