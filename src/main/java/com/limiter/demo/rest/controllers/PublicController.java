@@ -416,11 +416,12 @@ List<Purchaseobject> objects = new ArrayList<>();
                     
                     logger.info("Object saved to database and receipt created");
                 }
+                
                 productRepository.saveAll(tempo);
                 receipt.setDate(new Date());
                 receipt.setUser_id(user.get().getId());
                 receipt.setPurchasedObjects(objects);
-                receipt.setUser_name(SecurityContextHolder.getContext().getAuthentication().getName());
+                receipt.setUser_name(user.get().getUsername());
                 receiptRepository.save(receipt);
                 objects.clear();
                 System.out.println(items);
