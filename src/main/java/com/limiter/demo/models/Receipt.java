@@ -30,6 +30,6 @@ public class Receipt implements Serializable {
     private String phone_number;
     @Column(nullable = true)
     private String location;
-    // @Column(nullable = true)
-    private boolean delivered=false;
+    @Column(nullable = false)
+    private Boolean delivered=false;
 }
