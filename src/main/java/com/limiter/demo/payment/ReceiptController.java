@@ -5,15 +5,19 @@ import com.limiter.demo.models.UserEntity;
 import com.limiter.demo.repositories.ReceiptRepository;
 import com.limiter.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,6 +53,22 @@ public class ReceiptController {
     public Object getAllReceipts()
     {
         return new ResponseEntity<>(receiptRepository.findAll().parallelStream().collect(Collectors.toList()),HttpStatus.OK);
+    }
+
+    @GetMapping("users/receipts/{date}")
+    public Object getAllReceiptsPerDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date)
+    {
+        List<Receipt> list = receiptRepository.findAll().parallelStream().collect(Collectors.toList());
+        List<Receipt> finalList = list.parallelStream().filter(obj->obj.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(date)).collect(Collectors.toList());
+        return new ResponseEntity<>(finalList,HttpStatus.OK);
+    }
+
+    @GetMapping("users/receipts/today")
+    public Object getAllReceiptsForToday()
+    {
+        List<Receipt> list = receiptRepository.findAll().parallelStream().collect(Collectors.toList());
+        List<Receipt> finalList = list.parallelStream().filter(obj->obj.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())).collect(Collectors.toList());
+        return new ResponseEntity<>(finalList,HttpStatus.OK);
     }
 
     @GetMapping("users/all")
