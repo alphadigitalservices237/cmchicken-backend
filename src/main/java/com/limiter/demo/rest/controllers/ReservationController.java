@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.limiter.demo.models.Reservation;
 import com.limiter.demo.repositories.ReservationRepo;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
 @RestController
 @RequestMapping("api/public/reservation")
+@CrossOrigin(origins = "*")
 public class ReservationController {
     @Autowired
     ReservationRepo reservationRepo;
