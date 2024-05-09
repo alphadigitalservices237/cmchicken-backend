@@ -1,5 +1,7 @@
 package com.limiter.demo.models;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,4 +32,5 @@ public class Reservation {
     private String localisation;
     @Column(nullable = false)
     private String description;
+    private LocalDate date;
 }

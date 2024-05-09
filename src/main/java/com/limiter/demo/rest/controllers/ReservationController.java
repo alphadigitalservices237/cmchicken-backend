@@ -1,5 +1,6 @@
 package com.limiter.demo.rest.controllers;
 
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class ReservationController {
     //Create a reservation
    public Object reservationCreate( @RequestBody Reservation reservation)
     {
+        if (reservation.getDate() == null)
+        {
+            reservation.setDate(LocalDate.now());
+        }
         reservationRepo.save(reservation);
         return new ResponseEntity<>("Reservation Done", HttpStatus.OK);
     }
