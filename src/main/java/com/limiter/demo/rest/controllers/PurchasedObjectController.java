@@ -18,8 +18,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -42,7 +40,7 @@ public class PurchasedObjectController {
         if(client.isPresent())
         {
                 if (client.get().getPurchaseobjectList().isEmpty()) {
-                    return new ResponseEntity<>("NO ITEMS PURCHASED YET", HttpStatus.EXPECTATION_FAILED);
+                    return new ResponseEntity<>( client.get().getPurchaseobjectList(), HttpStatus.EXPECTATION_FAILED);
                 }
                 else {
                     return new ResponseEntity<>(client.get().getPurchaseobjectList(), HttpStatus.OK);
@@ -82,7 +80,7 @@ public class PurchasedObjectController {
         if(client.isPresent())
         {
                 if (client.get().getPurchaseobjectList().isEmpty()) {
-                    return new ResponseEntity<>("NO ITEMS PURCHASED YET", HttpStatus.OK);
+                    return new ResponseEntity<>(client.get().getPurchaseobjectList(), HttpStatus.OK);
                 }
                 else {
                     List<Purchaseobject> objs = client.get().getPurchaseobjectList().stream().filter(obj->obj.getAddedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now()))
