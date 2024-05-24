@@ -173,7 +173,7 @@ public String getPaymentStatus() {
 
     }
 
-    public String cancelPayment()
+    public String cancelPayment()  //method to cancel payment and refund user
     {
         RestTemplate restTemplate = new RestTemplate();
 
@@ -360,18 +360,16 @@ public Object doAll(@RequestBody List<Product> products,
                 @Override
                 public void run() {
 
-
                     try {
                         doTheRestWithDelivery(products,user,destination,phone);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
-
                 }
 
             };
             long delay = 70 * 1000;
-            logger.info("ACTION WILL COMPLETE IN 70 SECONDS PLEASE");//20 seconds in milliseconds
+            logger.info("ACTION WILL COMPLETE IN 70 SECONDS PLEASE");//70 seconds in milliseconds
             timer.schedule(task, delay);
 
             // Return response body
@@ -400,9 +398,10 @@ public Object doAll(@RequestBody List<Product> products,
 
             }
             else {
-Receipt receipt =new Receipt();
-List<Purchaseobject> objects = new ArrayList<>();
-                for (Product  t: items) {
+                    Receipt receipt =new Receipt();
+                    List<Purchaseobject> objects = new ArrayList<>();
+                                    for (Product  t: items)
+                                     {
 
                     Purchaseobject po = new Purchaseobject();
                     po.setName(t.getName());

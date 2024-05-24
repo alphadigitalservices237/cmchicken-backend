@@ -2,9 +2,11 @@ package com.limiter.demo.rest.controllers;
 
 import com.limiter.demo.models.Product;
 import com.limiter.demo.models.Purchaseobject;
+import com.limiter.demo.models.Receipt;
 import com.limiter.demo.models.UserEntity;
 import com.limiter.demo.repositories.ProductRepository;
 import com.limiter.demo.repositories.PurchaseObjectRepo;
+import com.limiter.demo.repositories.ReceiptRepository;
 import com.limiter.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,6 +20,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 @RestController
@@ -30,6 +39,8 @@ public class PurchasedObjectController {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ReceiptRepository receiptRepository;
 
 
     @GetMapping("products/all")
@@ -131,6 +142,23 @@ public class PurchasedObjectController {
         return simple;
     }
 
-
+    @GetMapping("products/en-cours")
+    public Object getObjectsEnCours() {
+        List<Receipt> receipts = receiptRepository.findAll().stream().collect(Collectors.toList());
+        List<Receipt> enCours = receipts.stream().filter(obj->obj.getDelivered()== false).collect(Collectors.toList());
+        return new ResponseEntity<>(enCours,HttpStatus.OK);
+        }
+    
+@PutMapping("product/{id}/setDelivered")
+public Object setDelivered(@PathVariable long id) {
+    Optional<Receipt> receipt = receiptRepository.findById(id);
+    if (receipt.isPresent())
+    {
+        receipt.get().setDelivered(true);
+        receiptRepository.save(receipt.get());
+        return new ResponseEntity<>("Products delivered",HttpStatus.OK);
+    }
+    return new ResponseEntity<>("No such Receipt",HttpStatus.BAD_REQUEST);
+}
 
 }
