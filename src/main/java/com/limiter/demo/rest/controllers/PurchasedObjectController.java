@@ -142,7 +142,7 @@ public class PurchasedObjectController {
         return simple;
     }
 
-    @GetMapping("products/en-cours")
+    @GetMapping("products/encours")
     public Object getObjectsEnCours() {
         List<Receipt> receipts = receiptRepository.findAll().stream().collect(Collectors.toList());
         List<Receipt> enCours = receipts.stream().filter(obj->obj.getDelivered()== false).collect(Collectors.toList());
