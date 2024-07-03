@@ -33,4 +33,6 @@ public class Reservation {
     @Column(nullable = false)
     private String description;
     private LocalDate date;
+    @Column(nullable = true)
+    private LocalDate eventDate;
 }

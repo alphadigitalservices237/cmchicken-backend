@@ -25,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+
 import org.slf4j.LoggerFactory;
 @RestController
 @RequestMapping("api/public")
@@ -52,6 +54,9 @@ public class PublicController {
     PurchaseObjectRepo purchaseObjectRepo;
     @Autowired
     TemporaryObjectRepo temporaryObjectRepo;
+
+    @Autowired
+    private EmailService emailService;
     Code c1 = new Code();
     List<Product> tempo = new ArrayList<>();
 
@@ -269,7 +274,12 @@ public Object doAll(@RequestBody List<Product> products,
 
 
                 try {
-                    doTheRest(products,user,location,phone);
+                    try {
+                        doTheRest(products,user,location,phone);
+                    } catch (MessagingException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);
                 }
@@ -361,7 +371,12 @@ public Object doAll(@RequestBody List<Product> products,
                 public void run() {
 
                     try {
-                        doTheRestWithDelivery(products,user,destination,phone);
+                        try {
+                            doTheRestWithDelivery(products,user,destination,phone);
+                        } catch (MessagingException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);
                     }
@@ -379,7 +394,7 @@ public Object doAll(@RequestBody List<Product> products,
         return new ResponseEntity<>("Please login",HttpStatus.UNAUTHORIZED);
 
     }
-    public Object doTheRest(List<Product> items,Optional<UserEntity> user, String location, String phone_number) throws JsonProcessingException
+    public Object doTheRest(List<Product> items,Optional<UserEntity> user, String location, String phone_number) throws JsonProcessingException, MessagingException
     {
         String jsonString=getPaymentStatus();
         ObjectMapper Mapper = new ObjectMapper();
@@ -428,6 +443,7 @@ public Object doAll(@RequestBody List<Product> products,
                 receipt.setLocation(location);
                 receipt.setPhone_number(phone_number);
                 receiptRepository.save(receipt);
+                emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items </h1></body></HTML>");
                 objects.clear();
                 System.out.println(items);
                 logger.info("Payment successful");
@@ -436,7 +452,7 @@ public Object doAll(@RequestBody List<Product> products,
 
     }
 
-    public Object doTheRestWithDelivery(List<Product> items,Optional<UserEntity> user,String destination,String phone_number) throws JsonProcessingException
+    public Object doTheRestWithDelivery(List<Product> items,Optional<UserEntity> user,String destination,String phone_number) throws JsonProcessingException, MessagingException
     {
         String jsonString=getPaymentStatus();
         ObjectMapper Mapper = new ObjectMapper();
@@ -487,6 +503,7 @@ List<Purchaseobject> objects = new ArrayList<>();
             receiptRepository.save(receipt);
             objects.clear();
             System.out.println(items);
+            emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items </h1></body></HTML>");
             logger.info("Payment successful");
             return new ResponseEntity<>("Payment successful",HttpStatus.OK);
         }
