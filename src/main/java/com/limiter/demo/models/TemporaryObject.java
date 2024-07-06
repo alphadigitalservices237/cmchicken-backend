@@ -15,6 +15,9 @@ public class TemporaryObject {
     @GeneratedValue
     private long id;
     private String name;
+    @Lob
+    @Column(nullable = true)
+    private byte[] image;
     private double price;
     private String description;
     private Date addedDate;

@@ -55,8 +55,10 @@ public class PublicController {
     @Autowired
     TemporaryObjectRepo temporaryObjectRepo;
 
+
     @Autowired
     private EmailService emailService;
+
     Code c1 = new Code();
     List<Product> tempo = new ArrayList<>();
 
@@ -85,6 +87,7 @@ public class PublicController {
                 to.setDescription(p.getDescription());
                 to.setPrice(p.getPrice());
                 to.setQuantity(p.getQuantity());
+                to.setImage(p.getImage());
                 temporaryObjectRepo.save(to);
 
                 for(Product po : productRepository.findAll())
@@ -427,6 +430,7 @@ public Object doAll(@RequestBody List<Product> products,
                     po.setBought(true);
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
+                    po.setImage(t.getImage());
                     objects.add(po);
                     purchaseObjectRepo.save(po);
                     
@@ -443,7 +447,7 @@ public Object doAll(@RequestBody List<Product> products,
                 receipt.setLocation(location);
                 receipt.setPhone_number(phone_number);
                 receiptRepository.save(receipt);
-                emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items </h1></body></HTML>");
+                emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: "+objects+"</h1></body></HTML>");
                 objects.clear();
                 System.out.println(items);
                 logger.info("Payment successful");
@@ -485,6 +489,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                     po.setBought(true);
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
+                    po.setImage(t.getImage());
                     objects.add(po);
                     purchaseObjectRepo.save(po);
                     
@@ -503,7 +508,7 @@ List<Purchaseobject> objects = new ArrayList<>();
             receiptRepository.save(receipt);
             objects.clear();
             System.out.println(items);
-            emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items </h1></body></HTML>");
+            emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: "+objects+"</h1></body></HTML>");
             logger.info("Payment successful");
             return new ResponseEntity<>("Payment successful",HttpStatus.OK);
         }
