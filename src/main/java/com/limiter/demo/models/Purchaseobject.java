@@ -18,8 +18,8 @@ public class Purchaseobject implements Serializable{
     @GeneratedValue
     private long id;
     private String name;
-    @Lob
-    private byte[] image;
+    // @Lob
+    // private byte[] image;
     private double price;
     private String description;
     private Boolean bought=false;
