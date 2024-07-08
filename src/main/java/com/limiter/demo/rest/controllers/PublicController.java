@@ -87,7 +87,7 @@ public class PublicController {
                 to.setDescription(p.getDescription());
                 to.setPrice(p.getPrice());
                 to.setQuantity(p.getQuantity());
-                to.setImage(p.getImage());
+                // to.setImage(p.getImage());
                 temporaryObjectRepo.save(to);
 
                 for(Product po : productRepository.findAll())
@@ -430,7 +430,7 @@ public Object doAll(@RequestBody List<Product> products,
                     po.setBought(true);
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
-                    po.setImage(t.getImage());
+                    // po.setImage(t.getImage());
                     objects.add(po);
                     purchaseObjectRepo.save(po);
                     
@@ -489,7 +489,7 @@ List<Purchaseobject> objects = new ArrayList<>();
                     po.setBought(true);
                     po.setAddedDate(new Date());
                     po.setPrice(t.getPrice());
-                    po.setImage(t.getImage());
+                    // po.setImage(t.getImage());
                     objects.add(po);
                     purchaseObjectRepo.save(po);
                     
