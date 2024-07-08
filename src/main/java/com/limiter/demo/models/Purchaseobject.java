@@ -7,12 +7,13 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.Date;
 @Entity
 @Table(name="purchase_object")
 @Data
 @NoArgsConstructor
-public class Purchaseobject {
+public class Purchaseobject implements Serializable{
     @Id
     @GeneratedValue
     private long id;
