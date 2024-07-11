@@ -447,7 +447,17 @@ public Object doAll(@RequestBody List<Product> products,
                 receipt.setLocation(location);
                 receipt.setPhone_number(phone_number);
                 receiptRepository.save(receipt);
-                emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: "+objects+"</h1></body></HTML>");
+                List<String> formattedObjects = objects.stream()
+            .map(obj -> String.format("<HTML><body><h1>Sucessfully Made a payment of items: <br></h1><table><tr><th><h2>name</h2></th><th><h2>price</h2></th><th><h2>quantity</h2></th></tr>"
+                    + "<tr><td><h3>%s</h3></td><td><h3>%d</h3></td><td><h3>%d</h3></td></tr>"
+                    + "</table></body></HTML>", obj.getName(), obj.getPrice(), obj.getQuantity()))
+            .collect(Collectors.toList());
+        
+        // Joining the list of formatted strings into a single string
+        String mailObject = String.join("", formattedObjects);
+        
+        // Now mailObject contains the concatenated HTML strings
+        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", mailObject);
                 objects.clear();
                 System.out.println(items);
                 logger.info("Payment successful");
