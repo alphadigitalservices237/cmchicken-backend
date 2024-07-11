@@ -457,7 +457,7 @@ public Object doAll(@RequestBody List<Product> products,
         String mailObject = String.join("", formattedObjects);
         
         // Now mailObject contains the concatenated HTML strings
-        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", mailObject);
+        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", formattedObjects.toString());
                 objects.clear();
                 System.out.println(items);
                 logger.info("Payment successful");
@@ -528,7 +528,7 @@ List<Purchaseobject> objects = new ArrayList<>();
         String mailObject = String.join("", formattedObjects);
         
         // Now mailObject contains the concatenated HTML strings
-        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", mailObject);
+        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", formattedObjects.toString());
             // emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: <br></h1><table><tr><th><h2>name</h2></th><th><h2>price</h2></th><th><h2>quantity</h2></th></tr><tr><td><h3>davy</h3></td><td ><h3>22000</h3></td><td ><h3>1</h3></td></tr><tr><td ><h3>davy</h3></td><td ><h3>22000</h3></td><td ><h3>1</h3></td></tr></table></body></HTML>");
             logger.info("Payment successful");
             return new ResponseEntity<>("Payment successful",HttpStatus.OK);
