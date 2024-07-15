@@ -397,6 +397,15 @@ public Object doAll(@RequestBody List<Product> products,
         return new ResponseEntity<>("Please login",HttpStatus.UNAUTHORIZED);
 
     }
+
+    public String formatItems(List<Purchaseobject> items) {
+        StringBuilder sb = new StringBuilder();
+        for (Purchaseobject item : items) {
+            sb.append(item.getName()).append(": ").append(item.getQuantity()).append("<br>").append(": ").append(item.getPrice());
+        }
+        return sb.toString();
+    }
+    
     public Object doTheRest(List<Product> items,Optional<UserEntity> user, String location, String phone_number) throws JsonProcessingException, MessagingException
     {
         String jsonString=getPaymentStatus();
@@ -458,7 +467,15 @@ public Object doAll(@RequestBody List<Product> products,
         
         // // Now mailObject contains the concatenated HTML strings
         // emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", formattedObjects.toString());
-        emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: <br>"+objects.toString().strip()+"</body></HTML>");
+        emailService.sendEmail(
+    user.get().getUsername(), 
+    "CM CHICKEN PURCHASE", 
+    "<HTML><body><h1>Successfully Made a Payment of Items:</h1>" +
+    formatItems(objects) +
+    "</body></HTML>"
+);
+
+        // emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: <br>"+objects.toArray() +"</body></HTML>");
         
         objects.clear();
                 System.out.println(items);
@@ -531,7 +548,14 @@ List<Purchaseobject> objects = new ArrayList<>();
         
         // // Now mailObject contains the concatenated HTML strings
         // emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", formattedObjects.toString());
-            emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: <br>"+objects.toString().strip()+"</body></HTML>");
+        emailService.sendEmail(
+            user.get().getUsername(), 
+            "CM CHICKEN PURCHASE", 
+            "<HTML><body><h1>Successfully Made a Payment of Items:</h1>" +
+            formatItems(objects) +
+            "</body></HTML>"
+        );
+            // emailService.sendEmail(user.get().getUsername(), "CM CHICKEN PURCHASE", "<HTML><body><h1>Sucessfully Made a payment of items: <br>"+objects.toString().strip()+"</body></HTML>");
             logger.info("Payment successful");
             return new ResponseEntity<>("Payment successful",HttpStatus.OK);
         }
