@@ -401,7 +401,8 @@ public Object doAll(@RequestBody List<Product> products,
     public String formatItems(List<Purchaseobject> items) {
         StringBuilder sb = new StringBuilder();
         for (Purchaseobject item : items) {
-            sb.append(item.getName()).append(": ").append(item.getQuantity()).append("<br>").append(": ").append(item.getPrice());
+            sb.append("<table style=\"border:1px solid black\"><tr><th><h2>name</h2></th><th><h2>quantity</h2></th><th><h2>price</h2></th></tr>").append("<tr><td style=\"border:1px solid black\"><h3>"+item.getName().toString()+"</h3></td><td style=\"border:1px solid black\"><h3>"+item.getQuantity()+"</h3></td><td style=\"border:1px solid black\"><h3>"+item.getPrice()+"</h3></td></tr>\r\n" + //
+                                "").append("</table>").append("<br><br><h3>total: </h3> <span>"+items.stream().mapToDouble(e->e.getPrice()*e.getQuantity())+"</span>");
         }
         return sb.toString();
     }
